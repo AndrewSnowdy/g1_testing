@@ -11,6 +11,7 @@ services:
     tty: true
     # Use privileged mode for easy access to USB devices (LiDAR, Camera)
     privileged: true
+    network_mode: "host"
     # Environment variables for GUI forwarding
     environment:
       - DISPLAY=${DISPLAY}
