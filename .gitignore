@@ -1,0 +1,16 @@
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE and OS files
+.vscode/
+.idea/
+*.DS_Store
+
+# Build artifacts
+build/
+dist/

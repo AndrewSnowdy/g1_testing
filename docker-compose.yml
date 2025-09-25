@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  g1-dev:
+    # Build the Docker image from the Dockerfile in this directory
+    build: .
+    # Name the container for easy reference
+    container_name: g1_dev_env
+    # Keep the container running and allow interactive sessions
+    stdin_open: true
+    tty: true
+    # Use privileged mode for easy access to USB devices (LiDAR, Camera)
+    privileged: true
+    # Environment variables for GUI forwarding
+    environment:
+      - DISPLAY=${DISPLAY}
+    # Volumes for GUI forwarding and mounting your project code
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # This links your entire project folder on the host to the workspace in the container
+      - .:/root/workspace
