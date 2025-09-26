@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     # OpenCV
     libopencv-dev \
+    # Unitree SDK2 dependency
+    libeigen3-dev \
     # Python
     python3 python3-pip python3-venv python3-dev \
     # Misc
@@ -29,18 +31,29 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
+# ------------------------
+# Install CycloneDDS system-wide
+# ------------------------
+WORKDIR /opt
+RUN git clone https://github.com/eclipse-cyclonedds/cyclonedds -b releases/0.10.x && \
+    cd cyclonedds && \
+    mkdir build install && \
+    cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=/opt/cyclonedds/install && \
+    cmake --build . --target install && \
+    rm -rf /opt/cyclonedds/build
+
+# Environment variables so Unitree SDKs find CycloneDDS
+ENV CYCLONEDDS_HOME=/opt/cyclonedds/install
+ENV CMAKE_PREFIX_PATH=/opt/cyclonedds/install
+# Ensure the dynamic linker can find CycloneDDS libs
+ENV LD_LIBRARY_PATH=/opt/cyclonedds/install/lib:$LD_LIBRARY_PATH
+
 # ============================================================
 # Workspace setup
 # ============================================================
 WORKDIR /root/workspace
 
-# ============================================================
-# Python dependencies
-# ============================================================
-# Install any shared requirements (from unitree_g1_vibes)
-RUN pip3 install --upgrade pip
-COPY test_scripts/unitree_g1_vibes/requirements.txt /tmp/requirements.txt
-RUN pip3 install -r /tmp/requirements.txt || true
 
 # ============================================================
 # Default shell

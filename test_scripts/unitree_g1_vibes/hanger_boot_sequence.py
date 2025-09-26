@@ -183,3 +183,8 @@ def hanger_boot_sequence(
 
 
 __all__ = ["hanger_boot_sequence"]
+
+
+if __name__ == "__main__":
+    bot = hanger_boot_sequence(iface="enxa0cec809f584")
+    print("Robot is in balanced stand, you can now send velocity commands.")
